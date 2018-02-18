@@ -11,18 +11,16 @@ import org.hopto.rubengm.roomtest.db.Datamanager;
 import org.hopto.rubengm.roomtest.db.objects.Item;
 
 public class MainActivity extends AppCompatActivity {
-	private ItemAdapter mAdapter = new ItemAdapter();
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-		binding.list.setAdapter(mAdapter);
+		binding.list.setAdapter(new ItemAdapter());
 		binding.add.setOnClickListener(this::add);
 		binding.empty.setOnClickListener(this::empty);
 		Datamanager.getLiveItems(this, liveItems -> liveItems.observe(this, items -> {
 			boolean autoScroll = ((LinearLayoutManager) binding.list.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0;
-			mAdapter.setItems(items);
+			((ItemAdapter) binding.list.getAdapter()).setItems(items);
 			if(autoScroll) binding.list.scrollToPosition(0);
 		}));
 	}
